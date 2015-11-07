@@ -1,0 +1,10 @@
+-Ô´´úÂëÔÄ¶Á
+--MAIN
+--const
+--type
+--var
+
+--error;
+
+--getsym;
+----getch
