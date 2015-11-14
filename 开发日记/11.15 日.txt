@@ -1,0 +1,3 @@
+CompileGetSym注释
+
+！strcpy_s c语言字符串必须\0结尾 并且\0占据一个物理空间

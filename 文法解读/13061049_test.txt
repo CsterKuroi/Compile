@@ -1,0 +1,33 @@
+const a=3,b=4,c=5;
+var x1x,s;
+procedure Circle;
+  begin
+    if a=1 then
+      begin
+        s:=1;
+        write(s)
+      end
+    else
+      begin
+        a:=a-1;
+        call Circle
+      end
+  end;
+
+begin
+  read(x1x);
+  write(x1x);
+  if x1x<2 then
+    begin
+      b:=2;
+      c:=3;
+      call Circle
+  else
+    begin
+      s:=2;
+      write(s);
+      while x1x>=2 do
+        x:=x-1
+    end;
+  write(a,b,c)
+end.

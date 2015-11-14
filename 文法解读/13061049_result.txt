@@ -1,0 +1,21 @@
+测试用例一
+输入：
+1       //read(x1x);
+期望输出：
+1       //write(x1x);
+1       //write(s)
+1
+2
+3       //write(a,b,c)
+
+
+
+测试用例二
+输入：
+2       //read(x1x);
+期望输出：
+2       //write(x1x);
+2       //write(s)
+3
+4
+5       //write(a,b,c)
