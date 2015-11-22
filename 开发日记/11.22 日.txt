@@ -1,0 +1,16 @@
+///////////
+//syntax 语法分析
+//1.添加了 block() constdeclaration() vardeclaration() enter() position() statement().. gen() test()
+//2.修改了err_msg[]  宏定义（便于test()） 
+//3 项目-属性-C/C++预处理器添加_CRT_SECURE_NO_WARNINGS  解决C4996 _s问题
+//4.修改了 13061049_test不符合语法的部分
+//@TODO
+//kuro1.com
+//github.com/CsterKuroi/Compile
+//modified by kuro1 on 2015.11.22 
+//////////
+
+red wrt 指令
+错误类型
+程序的非法字符（只有整形？）
+base（层次的关键）
