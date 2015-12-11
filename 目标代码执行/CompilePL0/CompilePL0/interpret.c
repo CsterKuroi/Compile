@@ -1,9 +1,9 @@
 //////////
 //interpret 目标代码执行
-//处理非法字符（非整形）
-//base（层次 重复定义）
+//[ok]不处理非法字符，int处理
+//多个过程同名变量问题 （原因在于block处理pro）
 //报错
-//大小写
+//[OK]大小写_stricmp
 //@TODO
 //kuro1.com
 //github.com/CsterKuroi/Compile
@@ -221,12 +221,12 @@ void getsym()
 		do
 		{
 			k = (i + j) / 2;
-			if (strcmp(id, word[k]) == 0) break;
-			else if (strcmp(id, word[k])<0)
+			if (_stricmp(id, word[k]) == 0) break;
+			else if (_stricmp(id, word[k])<0)
 			{
 				j = k - 1;
 			}
-			else if (strcmp(id, word[k])>0)
+			else if (_stricmp(id, word[k])>0)
 			{
 				i = k + 1;
 			}
@@ -364,7 +364,7 @@ long position(char* id)
 	long i;
 	strcpy(table[0].name, id);
 	i = tx;
-	while (strcmp(table[i].name, id) != 0)
+	while (_stricmp(table[i].name, id) != 0)
 	{
 		i--;
 	}
@@ -858,8 +858,8 @@ void block(unsigned long fsys)
 			dx1 = dx;
 			block(fsys | semicolon);
 			lev = lev - 1;
-			tx = tx1;
-			dx = dx1;
+//			tx = tx1;
+			dx = dx1;//问题
 			if (sym == semicolon)
 			{
 				getsym();
