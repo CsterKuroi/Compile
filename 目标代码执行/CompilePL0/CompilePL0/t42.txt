@@ -1,0 +1,42 @@
+const
+	a=2,
+	b=3,
+	c=40,
+	d=1,
+	e=404;
+var h,i,j,k,l,m,o,r,s,x,y;
+procedure ma;
+	begin
+		m:=m+1
+	end;
+procedure max;
+	begin
+		m:=m+1;
+		call ma
+	end;
+procedure min;
+	begin
+		x:=x-1;
+		m:=m+4;
+		call max
+	end;
+begin
+	read(x,y);
+	m:=d;
+	o:=a+b;
+	r:=-a+b;
+	s:=a+b*c;
+	h:=y+1;
+	i:=-1+h;
+	j:=3*a+b+2;
+	k:=3*a+2*b+2;
+	if x>=(y+1-1)
+		then 
+		begin
+			while m<10
+				do call min
+		end
+	else 
+		x:=y-x;
+	write (m,o,r,s,h,i,j,k)
+end.

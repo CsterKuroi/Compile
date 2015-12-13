@@ -1,0 +1,32 @@
+const 	a=1,b=2;
+var   	c,d,e,f,g,h;
+procedure m;
+	begin
+	 	read (c);
+		d:=12;
+		if	c<10	
+		then
+			d:=d+1		
+	end;
+procedure n;
+	begin
+		read (f)
+	end;
+begin
+	call m;
+	call n;
+	e:=3;
+	if	d>=13
+		then 
+			g:=1
+	else
+		g:=2;
+	while	g<2
+	do
+		begin
+			e:=2;
+			g:=g+1
+		end;
+	h:=f*e;
+	write (h)
+end.

@@ -1,11 +1,12 @@
-const a=3,b=4,c=5;
+const a=3,b=4,c=5,m=199;
 var x1x,s,a1,b1,c1;
-procedure Circle;
+procedure circle;
+  const m=555;
   begin
     if a1=1 then
       begin
         s:=1;
-        write(s)
+        write(s,m)
       end
     else
       begin
@@ -33,5 +34,5 @@ begin
       while x1x>=2 do
         x1x:=x1x-1
     end;
-  write(a1,b1,c1)
+  write(a1,b1,c1,m)
 end.

@@ -1,9 +1,10 @@
 //////////
 //interpret 目标代码执行
-//[ok]不处理非法字符，int处理
-//多个过程同名变量问题 （原因在于block处理pro）
-//报错
 //[OK]大小写_stricmp
+//[OK]报错
+//[ok]not非法字符，int处理
+//[ok]父子可以处理重名 允许多个子过程 用到LEVEL
+//[ok]not处理子过程查表越界问题
 //@TODO
 //kuro1.com
 //github.com/CsterKuroi/Compile
@@ -81,7 +82,7 @@ char* err_msg[] =
 	"错误4：需要标识符！",
 	"错误5：需要分号’;’！",
 	"错误6：过程说明末尾出现非法字符",
-	"错误7：",
+	"错误7：说明部分之后应该为复合语句",
 	"错误8：分程序结尾有非法字符",
 	"错误9：需要句号’.’",
 	"错误10：需要分号’;’！",
@@ -123,6 +124,7 @@ unsigned long sym;
 char id[al + 1];
 long num;
 long cc;
+long ln;//行号
 long ll;
 long kk,err;
 long cx;
@@ -150,11 +152,7 @@ long s[stacksize];
 
 void error(long n)
 {
-	printf("Error=>");
-	for (int i = 1; i <= cc - 1; i++)
-	{
-		printf(" ");
-	}
+	printf("Error=>(%d,%d)",ln,cc-1);
 	printf("|%s(%d)\n", err_msg[n], n);
 	err++;
 }//error1
@@ -163,6 +161,7 @@ void getch()
 {
 	if (cc == ll)
 	{
+		ln++;
 		if (feof(infile))
 		{
 			printf("***************\n");
@@ -175,10 +174,10 @@ void getch()
 		cc = 0;
 		while ((!feof(infile)) && ((ch = getc(infile)) != '\n')&& (ch != -1))
 		{
-			printf("%c", ch);
+//			printf("%c", ch);
 			line[++ll] = ch;
 		}
-		printf("\n");
+//		printf("\n");
 		line[++ll] = ' ';
 	}
 	ch = line[++cc];
@@ -364,7 +363,7 @@ long position(char* id)
 	long i;
 	strcpy(table[0].name, id);
 	i = tx;
-	while (_stricmp(table[i].name, id) != 0)
+	while (_stricmp(table[i].name, id) != 0 || lev<table[i].level)
 	{
 		i--;
 	}
@@ -854,23 +853,23 @@ void block(unsigned long fsys)
 				error(5);
 			}
 			lev = lev + 1;
-			tx1 = tx;
+			
 			dx1 = dx;
 			block(fsys | semicolon);
 			lev = lev - 1;
-//			tx = tx1;
+
 			dx = dx1;//问题
 			if (sym == semicolon)
 			{
 				getsym();
-				test(statbegsys | ident | procsym, fsys, 6);
 			}
 			else
 			{
 				error(5);
 			}
 		}
-		test(statbegsys | ident, declbegsys, 7);//TODO 1
+
+		test(beginsym, statbegsys | ident| declbegsys, 7);//TODO 1
 	} while (sym&declbegsys);
 	code[table[tx0].addr].a = cx;//把前面生成的跳转语句的跳转位置改成当前位置
 	table[tx0].addr = cx;
@@ -879,7 +878,7 @@ void block(unsigned long fsys)
 	statement(fsys | semicolon | endsym);
 	gen(opr, 0, 0); // return
 	test(fsys, 0, 8);
-	listcode(cx0);
+//	listcode(cx0);
 }
 
 long base(long b, long l)
@@ -1049,14 +1048,18 @@ int main()
 	declbegsys = constsym | varsym | procsym;
 	statbegsys = beginsym | callsym | ifsym | whilesym| elsesym;
 	facbegsys = ident | number | lparen;
-
-	if ((infile = fopen("13061049_test.txt", "r")) == NULL)
+	strcpy(infilename, "13061049_test.txt");
+	//读取文件
+	printf("please input source program file name : \n");
+	scanf_s("%s", infilename, 160);
+	if ((infile = fopen(infilename, "r")) == NULL)
 	{
 		printf("File %s can't be opened.\n", infilename);
 		exit(1);
 	}
 	err = 0;
 	cc = 0;
+	ln = 0;
 	cx = 0;
 	ll = 0;
 	ch = ' ';
@@ -1070,15 +1073,15 @@ int main()
 		error(9);
 	}
 	printf("<--代码生成结束-->\n");
-	for (int i = 0; i < cx; i++)
-		printf("%10d%5s%5d%5d\n", i, mnemonic[code[i].f], code[i].l, code[i].a);
 	if (err == 0)
 	{
+		for (int i = 0; i < cx; i++)
+			printf("%10d%5s%5d%5d\n", i, mnemonic[code[i].f], code[i].l, code[i].a);
 		interpret();
 	}
 	else
 	{
-		printf("%d errors in pro\n",err);
+		printf("%d errors in %s\n",err,infilename);
 	}
 	fclose(infile);
 	return 0;
