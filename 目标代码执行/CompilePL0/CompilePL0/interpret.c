@@ -1,14 +1,15 @@
 //////////
 //interpret 目标代码执行
-//[OK]大小写_stricmp
-//[OK]报错
 //[ok]not非法字符，int处理
-//[ok]父子可以处理重名 允许多个子过程 用到LEVEL
-//[ok]not处理子过程查表越界问题
+//[ok]父子可以处理重名 允许多个子过程
+//未处理同级子过程查表越界问题(符号表结构)
+//报错的准确性
+//[OK]大小写_stricmp
+//[OK]无符号整数 开头非0
 //@TODO
 //kuro1.com
 //github.com/CsterKuroi/Compile
-//modified by kuro1 on 2015.12.10
+//modified by kuro1 on 2015.12.16
 //////////
 
 #include <stdio.h>
@@ -75,7 +76,7 @@ typedef struct
 } instruction;
 char* err_msg[] =
 {
-	"错误0：",
+	"错误0：非正常结束！",
 	"错误1：需要’=’而不是’:=’！",
 	"错误2：需要数字！",
 	"错误3：需要等号/赋值号！",
@@ -100,8 +101,8 @@ char* err_msg[] =
 	"错误22：需要右括号’)’！",
 	"错误23：因子之间应该为'*'或'/'",
 	"错误24：因子开头应该为标识符/数字/左括号",
-	"错误25：",
-	"错误26：",
+	"错误25：无符号整数的首字符应该为非零数字！",
+	"错误26：生成代码过多！",
 	"错误27：",
 	"错误28：",
 	"错误29：",
@@ -172,12 +173,13 @@ void getch()
 		}
 		ll = 0;
 		cc = 0;
+		printf("%-4d", ln);
 		while ((!feof(infile)) && ((ch = getc(infile)) != '\n')&& (ch != -1))
 		{
-//			printf("%c", ch);
+			printf("%c", ch);
 			line[++ll] = ch;
 		}
-//		printf("\n");
+		printf("\n");
 		line[++ll] = ' ';
 	}
 	ch = line[++cc];
@@ -244,6 +246,8 @@ void getsym()
 		k = 0;
 		num = 0;
 		sym = number;
+		if (ch=='0')
+			error(25);
 		do
 		{
 			num = num * 10 + (ch - '0');
@@ -310,7 +314,7 @@ void gen(enum fct x, long y, long z)
 {
 	if (cx > cxmax)
 	{
-		error(0);
+		error(26);
 		exit(1);
 	}
 	code[cx].f = x;
@@ -346,6 +350,7 @@ void enter(enum object k)
 				num = 0;
 			}
 			table[tx].val = num;
+			table[tx].level = lev;
 			break;
 		case variable:
 			table[tx].level = lev;
@@ -390,6 +395,10 @@ void constdeclaration()
 			else
 			{
 				error(2);
+				if (sym == ident)
+				{
+					getsym();
+				}
 			}
 		}
 		else
@@ -479,7 +488,7 @@ void factor(unsigned long fsys)
 				error(22);
 			}
 		}
-		//test(fsys, lparen, 23);
+//		test(fsys, lparen, 23);
 	}
 }//fac1
 
@@ -551,6 +560,8 @@ void condition(unsigned long fsys)
 		if (!(sym&(eql | neq | lss | gtr | leq | geq)))
 		{
 			error(20);
+			getsym();
+			getsym();
 		}
 		else
 		{
@@ -605,6 +616,10 @@ void statement(unsigned long fsys)
 		else
 		{
 			error(13);
+			if (sym ==eql)
+			{
+				getsym();
+			}
 		}
 		expression(fsys);
 		if (i != 0)
@@ -866,6 +881,10 @@ void block(unsigned long fsys)
 			else
 			{
 				error(5);
+				if (sym == period)
+				{
+					getsym();
+				}
 			}
 		}
 
@@ -990,7 +1009,6 @@ void interpret()
 
 int main()
 {
-	printf("<--代码生成开始-->\n");
 	for (int i = 0; i<256; i++)
 	{
 		ssym[i] = nul;
@@ -1057,6 +1075,7 @@ int main()
 		printf("File %s can't be opened.\n", infilename);
 		exit(1);
 	}
+	printf("<--代码生成开始-->\n");
 	err = 0;
 	cc = 0;
 	ln = 0;

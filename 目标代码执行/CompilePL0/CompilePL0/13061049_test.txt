@@ -25,12 +25,12 @@ begin
     begin
       b1:=2;
       c1:=3;
-      call Circle;
+      call circle;
     end
   else
     begin
       s:=2;
-      write(s);
+      write (s);
       while x1x>=2 do
         x1x:=x1x-1
     end;

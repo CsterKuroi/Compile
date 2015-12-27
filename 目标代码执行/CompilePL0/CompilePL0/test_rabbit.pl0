@@ -1,7 +1,7 @@
-const z=0;
+const z=2;
 var head,foot,cock,rabbit,n;
 begin
-  n:=z;
+  n:=1-1;
   read(head,foot);
   cock:=1;
   while cock<=head do 
@@ -14,5 +14,5 @@ begin
     end;
     cock:=cock+1;
   end;
-  if n=0 then write(0,0)
+  if n=1-1 then write(1-1,1-1)
 end.
