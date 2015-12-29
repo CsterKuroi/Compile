@@ -7,9 +7,11 @@
 //[OK]大小写_stricmp
 //[OK]无符号整数 开头非0
 //@TODO
+//重复定义
+//0的问题
 //kuro1.com
 //github.com/CsterKuroi/Compile
-//modified by kuro1 on 2015.12.16
+//modified by kuro1 on 2015.12.29
 //////////
 
 #include <stdio.h>

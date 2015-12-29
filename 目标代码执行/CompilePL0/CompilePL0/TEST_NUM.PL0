@@ -15,7 +15,7 @@ begin
   x:=a;
   y:=b;
   call mod;
-  while x<>0 do
+  while x<>1-1 do
   begin
     call swap;
     call mod
