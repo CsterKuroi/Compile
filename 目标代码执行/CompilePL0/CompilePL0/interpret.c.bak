@@ -1,17 +1,12 @@
 //////////
 //interpret 目标代码执行
-//[ok]not非法字符，int处理
-//[ok]父子可以处理重名 允许多个子过程
-//未处理同级子过程查表越界问题(符号表结构)
-//报错的准确性
-//[OK]大小写_stricmp
-//[OK]无符号整数 开头非0
 //@TODO
+//未处理同级子过程查表越界问题(符号表结构)
 //重复定义
-//0的问题
+//3(e2) 4 5 文档
 //kuro1.com
 //github.com/CsterKuroi/Compile
-//modified by kuro1 on 2015.12.16
+//modified by kuro1 on 2015.12.29
 //////////
 
 #include <stdio.h>
