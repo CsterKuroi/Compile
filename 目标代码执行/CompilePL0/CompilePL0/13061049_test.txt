@@ -1,5 +1,5 @@
-const a=3,b=4,c=5,m=199;
-var x1x,s,a1,b1,c1;
+const a=3,b=4,c=5,m=199,yyy=222;
+var x1x,s,a1,b1,c1,yyy;
 procedure circle;
   const m=555;
   begin
@@ -30,7 +30,7 @@ begin
   else
     begin
       s:=2;
-      write (s);
+      write (s,m);
       while x1x>=2 do
         x1x:=x1x-1
     end;

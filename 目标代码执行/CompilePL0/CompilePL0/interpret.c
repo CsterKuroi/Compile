@@ -2,7 +2,6 @@
 //interpret 目标代码执行
 //@TODO
 //未处理同级子过程查表越界问题(符号表结构)
-//重复定义
 //3(e2) 4 5 文档
 //kuro1.com
 //github.com/CsterKuroi/Compile
@@ -100,7 +99,7 @@ char* err_msg[] =
 	"错误24：因子开头应该为标识符/数字/左括号",
 	"错误25：无符号整数的首字符应该为非零数字！",
 	"错误26：生成代码过多！",
-	"错误27：",
+	"错误27：非法同名标识符",
 	"错误28：",
 	"错误29：",
 	"错误30：数字太大！",
@@ -333,8 +332,14 @@ void test(unsigned long s1, unsigned long s2, long n)
 	}
 }//test1
 
-void enter(enum object k)
+long position(char* id);
+
+void enter(enum object k,long tx0)
 {
+	long i;
+	i = position(id);
+	if (i > tx0)
+		error(27);
 	tx++;
 	strcpy(table[tx].name, id);
 	table[tx].kind = k;
@@ -365,14 +370,14 @@ long position(char* id)
 	long i;
 	strcpy(table[0].name, id);
 	i = tx;
-	while (_stricmp(table[i].name, id) != 0 || lev<table[i].level)
+	while (_stricmp(table[i].name, id) != 0 || lev<table[i].level)//（不同名）（同名但是子层次的符号）
 	{
 		i--;
 	}
 	return i;
 }//pos1
 
-void constdeclaration()
+void constdeclaration(long tx0)
 {
 	if (sym == ident)
 	{
@@ -386,7 +391,7 @@ void constdeclaration()
 			getsym();
 			if (sym == number)
 			{
-				enter(constant);
+				enter(constant,tx0);
 				getsym();
 			}
 			else
@@ -409,11 +414,11 @@ void constdeclaration()
 	}
 }//con1
 
-void vardeclaration()
+void vardeclaration(long tx0)
 {
 	if (sym == ident)
 	{
-		enter(variable);
+		enter(variable,tx0);
 		getsym();
 	}
 	else
@@ -795,7 +800,7 @@ void block(unsigned long fsys)
 {
 	long tx0;		// 层初始符号表指针
 	long cx0; 		// 层初始code指针
-	long tx1;		// 调用前保留现场
+//	long tx1;		// 调用前保留现场
 	long dx1;
 	dx = 3;
 	tx0 = tx;
@@ -810,11 +815,11 @@ void block(unsigned long fsys)
 		if (sym == constsym)
 		{
 			getsym();
-			constdeclaration();
+			constdeclaration(tx0);
 			while (sym == comma)
 			{
 				getsym();
-				constdeclaration();
+				constdeclaration(tx0);
 			}
 			if (sym == semicolon)
 			{
@@ -828,11 +833,11 @@ void block(unsigned long fsys)
 		if (sym == varsym)
 		{
 			getsym();
-			vardeclaration();
+			vardeclaration(tx0);
 			while (sym == comma)
 			{
 				getsym();
-				vardeclaration();
+				vardeclaration(tx0);
 			}
 			if (sym == semicolon)
 			{
@@ -849,7 +854,7 @@ void block(unsigned long fsys)
 			getsym();
 			if (sym == ident)
 			{
-				enter(proc);
+				enter(proc,tx0);
 				getsym();
 			}
 			else
