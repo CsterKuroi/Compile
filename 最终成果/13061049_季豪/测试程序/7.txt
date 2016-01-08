@@ -1,0 +1,15 @@
+const b=2;
+var c;
+procedure p;
+  begin
+c:=a+b;
+  end;
+begin
+  read(b);
+  while b<>100 do
+  begin
+call p;
+write(2*c);
+read(b);	
+  end;
+end.
