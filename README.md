@@ -1,0 +1,2 @@
+# Compile
+PL/0
